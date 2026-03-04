@@ -2,7 +2,7 @@
 Codes for analyzing Martian rampart crater ejecta
 
 This repository contains the input files and Python analysis scripts associated with the paper:
-**"Numerical modeling ejecta deposition from oblique impacts in icy layered terrains on Mars"** submitted to *Icarus*.
+**"Numerical modeling ejecta deposition from oblique impacts in icy layered terrains on Mars"** submitted to *Icarus*. The doi in Zenodo is https://doi.org/10.5281/zenodo.18863481
 
 ## 📌 Overview
 
