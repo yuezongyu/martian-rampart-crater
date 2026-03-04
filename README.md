@@ -19,7 +19,18 @@ The simulations are conducted using the open-source hydrocodes **SALEc** and **S
 1. Install the hydrocode according to the authors' instructions.
 2. Use the parameter files located in the `input_files/` directory to run the impact simulations for each target configuration.
 
-### Step 2: Run the Analysis Scripts
+### Step 2: Data Pre-processing (VTS Slicing)
+Please note that some of the Python analysis scripts do not read the raw SALEc outputs directly. Instead, they require 2D slice files extracted from the raw 3D `.vts` data. 
+
+This extraction is performed using the **`SALECVtsSlice`** program. 
+
+> **Note for batch processing:** > A custom local shell script is used to automate this slicing process across multiple output files. For internal reference, this script is executed via:
+> ```bash
+> generate_slice.sh Rampart-job2002 0:1000:1
+> ```
+> Users looking to reproduce the pipeline must ensure the raw data is sliced appropriately using `SALECVtsSlice` before executing the Python plotting scripts in the next step.
+
+### Step 3: Run the Analysis Scripts
 Once the simulations are complete and the output data is generated on your local machine/server, you can use our Python scripts to process the ejecta data.
 
 **Requirements:**
@@ -28,3 +39,5 @@ Once the simulations are complete and the output data is generated on your local
 * `matplotlib`
 * `pandas`
 *  ......
+
+Once the simulations are complete and the output data is generated on your local machine/server, you can use our Python scripts to process the ejecta data.
