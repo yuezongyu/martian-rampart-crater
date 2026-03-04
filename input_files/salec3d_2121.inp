@@ -1,0 +1,130 @@
+# This is a input example of SALEc written by huachengli
+# Case Insensitive, uSINg [m,kg,s]
+# comment lines begin with "#/-* at first character
+# This is a input example of SALEc written by huachengli
+# Case Insensitive, uSINg [m,kg,s]
+# comment lines begin with "#/-* at first character
+[processor]
+    npgx    = 16 /* number of processors in X direction */
+    npgy    = 8
+    npgz    = 8
+    noffset = 2 /* only for debug; not change */
+
+[mesh]
+    dx  = 10.0 /*spacing of grid in X direction */
+    dy  = 10.0
+    dz  = 10.0
+    npx = 64  /* number of vertexes in X direction */
+    npy = 128
+    npz = 64
+    ext = on /* extension of grid : GRIDEXT*/
+    ex  = [1.02,60,60] /*GRIDH*/
+    ey  = [1.02,60,60] /*GRIDV*/
+    ez  = [1.02,50,40]
+    O   = [0.5,0.5,0.6]
+
+[projectile]
+    material = basproj
+    radiu    = 100.0
+    center   = [0.0,0.0,100.0] // Cartesian[x,y,z]
+    velocity = [-1.0e4,60.0,0.0] // Spherical[r,theta(degree),phi(degree)]
+    damage   = [const,0.0]
+    pressure = [const,1.0]
+    temperature = [const,210.0]
+    density = [derived,]
+
+[target]
+    number   = 3
+    toplevel = 0.0
+    material = [bastrgt,ice____,bastrgt]
+    depth    = [100.0,100.0,290.0e3]
+    damage    = [const,0.0]
+    temperature = [convective,210]
+    pressure    = [derived,RK3]
+    d_lith = 300.0e3
+    surf_dtdz = 0.0e-3
+    surf_gravity = 3.721
+    r_planet = 3389.5e3
+    surf_temperature = 210.0
+
+[condition]
+    gravity     = [const,-3.721]
+
+[boundary]
+    front = freeslip
+    back  = freeslip
+    bottom= fixed
+    top   = outflow
+    left  = freeslip
+    right = freeslip
+
+[numerical]
+    ARTVIS  = 1.2  /*quad*/
+    ARTVIS2 = 0.5  /*linear*/
+    CISSAMK = 1.0
+    Courant = 0.25
+    MaxVelocity = 2.0e4
+    damping = off
+    LAMBDA  = [8,0.05]
+
+[cycle]
+    dt0        = 1.5e-4
+    maxdt      = 2.0e-2
+    time0      = 0.0     /*start time*/
+    time1      = 401.0  /* end  time*/
+    maxstep    = 40000000  /*maximum step*/
+
+[output]
+    prefix    = ParaTest
+    format    = binary
+    time      = 0.5      /* the time interval to output */
+    init      = 0        /* the 0-init timestep will be output */
+
+[material]
+    nm      = 4
+    // the first material is reserved for vacuum, cannot be changed !!!
+    postfix = [null   ,  aneos,tillotson,aneos]
+    name    = [vacuum_,  basproj,ice____,bastrgt]
+
+    // [shear] strength model description
+    yint0   = [,2.00e7,1.00e7,2.00e7]
+    yintfri = [,1.20  ,2.00,1.20  ]
+    yintlim = [,3.50e9,1.10e8,3.50e9]
+    ydam0   = [,2.00e5,1.00e4,2.00e5]
+    ydamfri = [,0.85  ,  0.55  ,0.85  ]
+    ydamlim = [,3.50e9,1.10e8,3.50e9]
+    yshear  = [,SimpleRockT,SimpleIceT,SimpleRockT]
+
+    // damage model
+    IvanA   = [,    1.0e-4 ,1.0e-4,1.0e-4]
+    IvanB   = [,    1.0e-11,1.0e-11,1.0e-11]
+    IvanC   = [,    3.0e8  ,3.0e8,3.0e8]
+    damage  = [,SimpleShear,SimpleShear,SimpleShear]
+
+    // tensile strength model
+    yten0   = [,3.0e8,3.0e8,3.0e8]
+    ytens   = [,SimpleTensile,SimpleTensile,SimpleTensile]
+
+    // other
+    Poisson = [,0.30, 0.33, 0.30]
+   
+    // thermal soft
+    OhnakaXi = [,0.0, 1.20, 1.20 ]
+    SimonA   = [,1.84e+9 , 6.00e+9, 1.84e+9]
+    SimonC   = [,7.27 , 3.00, 7.27]
+    SimonT0  = [,1360, 273, 1360 ]
+
+    // ACFL Block Model parameter
+    BlockSize  = [,100.0 , 100.0, 100.0]
+    GammaEta   = [,1.00e-1, 1.00e-1, 1.00e-1]
+    GammaBeta  = [,1.50e+2, 1.50e+2, 1.50e+2]
+    Toff       = [,-16.0  , -16.0, -16.0]
+    Cvib       = [,0.1    , 0.1,  0.1]
+    Vibmax     = [,200.0  , 200, 200]
+    Pvlim      = [,2.5e10 , 2.5e10, 2.5e10]
+[tracer]
+    type       = Field
+    prefix     = bm
+[ejecta]
+    type = Flat
+    threshold = 1.0
